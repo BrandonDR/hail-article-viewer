@@ -5,7 +5,7 @@ namespace App\Console\Commands;
 use App\Services\HailService;
 use Illuminate\Console\Command;
 
-class OganisationList extends Command
+class OrganisationList extends Command
 {
     /**
      * The name and signature of the console command.
@@ -42,9 +42,11 @@ class OganisationList extends Command
 
         $this->info('Organisations list:');
 
-        foreach ($organisations as $org) {
-            $this->info($org->id . ' -> ' . $org->name);
+        $values = [];
+        foreach ($organisations as $organisation) {
+            $values[] = collect($organisation)->only(['id', 'name'])->toArray();
         }
+        $this->table(['id', 'name'], $values);
         return 0;
     }
 }
