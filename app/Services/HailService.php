@@ -2,22 +2,33 @@
 
 namespace App\Services;
 
-use Symfony\Component\HttpKernel\Exception\ServiceUnavailableHttpException;
+use App\Models\OAuth;
+use Carbon\Carbon;
 
 class HailService
 {
-    public function authenticate()
+    public static function getOrganisations()
     {
-        // throw new ServiceUnavailableHttpException();
+        $oauth = OAuth::whereProvider('hail')->firstOrFail();
+
+        $me = $oauth->getAuthenticatedResponse(
+            'GET',
+            'v1/me'
+        );
+
+        return $oauth->getAuthenticatedResponse(
+            'GET',
+            'v1/users/' . $me->id . '/organisations'
+        );
     }
 
-    public function getArticles(): array
+    public static function getArticles(): array
     {
-        usleep(100000); // Simulate external API
-        return [
-            ['id' => 1, 'title' => 'Article 1'],
-            ['id' => 1, 'title' => 'Article 2'],
-            ['id' => 1, 'title' => 'Article 3']
-        ];
+        $oauth = OAuth::whereProvider('hail')->firstOrFail();
+
+        return $oauth->getAuthenticatedResponse(
+            'GET',
+            'v1/organisations/' . config('hail.organisation_id') . '/articles'
+        );
     }
 }

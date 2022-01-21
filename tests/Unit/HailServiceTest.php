@@ -3,18 +3,28 @@
 namespace Tests\Unit;
 
 use App\Services\HailService;
-use PHPUnit\Framework\TestCase;
+use Tests\TestCase;
 
 class HailServiceTest extends TestCase
 {
     public function test_retrieve_articles()
     {
-        $service = new HailService;
-        $service->authenticate();
-        $articles = $service->getArticles();
+        $articles = HailService::getArticles();
 
         $this->assertIsArray($articles);
         $this->assertGreaterThan(0, count($articles));
-        $this->assertArrayHasKey('title', $articles[0]);
+        $this->assertObjectHasAttribute('id', $articles[0]);
+        $this->assertObjectHasAttribute('title', $articles[0]);
+        $this->assertObjectHasAttribute('url', $articles[0]);
+    }
+
+    public function test_retrieve_organisations()
+    {
+        $organisations = HailService::getOrganisations();
+
+        $this->assertIsArray($organisations);
+        $this->assertGreaterThan(0, count($organisations));
+        $this->assertObjectHasAttribute('id', $organisations[0]);
+        $this->assertObjectHasAttribute('name', $organisations[0]);
     }
 }

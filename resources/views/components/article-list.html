@@ -4,7 +4,7 @@
     <div v-else-if="empty">No articles found.</div>
     <ul v-else>
         <li v-for="article of articles" :key="article.id">
-            <a :href="article.url">{{article.title}}</a>
+            <a :href="article.url" @click.prevent="openArticle(article)">{{article.title}}</a>
         </li>
     </ul>
 </div>
