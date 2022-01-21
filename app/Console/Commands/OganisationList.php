@@ -19,7 +19,7 @@ class OganisationList extends Command
      *
      * @var string
      */
-    protected $description = 'Command description';
+    protected $description = 'List organisations of the authenticated user';
 
     /**
      * Create a new command instance.
