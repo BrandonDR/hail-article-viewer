@@ -15,6 +15,6 @@ class HailServiceTest extends TestCase
 
         $this->assertIsArray($articles);
         $this->assertGreaterThan(0, count($articles));
-        $this->assertArrayHasKey('title', $articles);
+        $this->assertArrayHasKey('title', $articles[0]);
     }
 }
