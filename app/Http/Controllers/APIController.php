@@ -14,8 +14,7 @@ class APIController extends Controller
             return response()->json(Cache::get('hail_articles'));
         }
 
-        $hail->authenticate();
-        $articles = $hail->getArticles();
+        $articles = HailService::getArticles();
 
         info('NOT using cache');
         Cache::put('hail_articles', $articles, now()->addMinutes(5));

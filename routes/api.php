@@ -1,7 +1,7 @@
 <?php
 
 use App\Http\Controllers\APIController;
-use Illuminate\Http\Request;
+use App\Http\Controllers\OAuthController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,3 +16,5 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::get('articles', [APIController::class, 'getArticles']);
+
+Route::get('oauth/{providerName}/callback', [OAuthController::class, 'callback']);
