@@ -13,6 +13,7 @@ class HailService
 
     public function getArticles(): array
     {
+        usleep(100000); // Simulate external API
         return [
             ['id' => 1, 'title' => 'Article 1'],
             ['id' => 1, 'title' => 'Article 2'],
