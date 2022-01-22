@@ -40,26 +40,32 @@ class OAuth extends Model
         ]);
     }
 
+    public function refreshAccessToken()
+    {
+        $provider = $this->getProvider();
+        info('Refreshing token');
+        try {
+            $newAccessToken = $provider->getAccessToken('refresh_token', [
+                'refresh_token' => $this->refresh_token
+            ]);
+        } catch (\Exception $e) {
+            logger()->error($e);
+            throw new ServiceUnavailableHttpException();
+        }
+
+        $this->update([
+            'access_token' => $newAccessToken->getToken(),
+            'refresh_token' => $newAccessToken->getRefreshToken(),
+            'expires_at' => Carbon::parse($newAccessToken->getExpires())
+        ]);
+    }
+
     public function getAuthenticatedResponse($method, $url)
     {
         $provider = $this->getProvider();
 
         if (now()->gte($this->expires_at)) {
-            info('Refreshing token');
-            try {
-                $newAccessToken = $provider->getAccessToken('refresh_token', [
-                    'refresh_token' => $this->refresh_token
-                ]);
-            } catch (\Exception $e) {
-                logger()->error($e);
-                throw new ServiceUnavailableHttpException();
-            }
-
-            $this->update([
-                'access_token' => $newAccessToken->getToken(),
-                'refresh_token' => $newAccessToken->getRefreshToken(),
-                'expires_at' => Carbon::parse($newAccessToken->getExpires())
-            ]);
+            $this->refreshAccessToken();
         }
 
         $client = new Client;
